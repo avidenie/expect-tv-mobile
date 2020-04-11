@@ -1,10 +1,11 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"javascript.preferences.importModuleSpecifier": "non-relative"
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "javascript.preferences.importModuleSpecifier": "non-relative",
+    "editor.formatOnSave": true
+  }
 }
