@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { Props } from 'routes/DiscoverStack';
 
-function Discover({ navigation }: Props<'Discover'>) {
+function Discover({ navigation }: Props<'Discover'>): React.ReactElement {
   return (
     <View style={styles.container}>
       <Text>Discover Screen</Text>

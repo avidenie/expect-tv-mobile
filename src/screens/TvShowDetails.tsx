@@ -7,7 +7,7 @@ import { Props as TvShowsProps } from 'routes/TvShowsStack';
 
 type Props = DiscoverProps<'TvShowDetails'> | TvShowsProps<'TvShowDetails'>;
 
-function TvShowDetails({ navigation, route }: Props) {
+function TvShowDetails({ navigation, route }: Props): React.ReactElement {
   const tvShowId = route.params.id;
   return (
     <View style={styles.container}>

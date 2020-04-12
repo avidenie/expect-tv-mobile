@@ -28,7 +28,7 @@ export type Props<T extends keyof ParamList> = {
 
 const Stack = createStackNavigator<ParamList>();
 
-function TvShowsStack() {
+function TvShowsStack(): React.ReactElement {
   return (
     <Stack.Navigator>
       <Stack.Screen

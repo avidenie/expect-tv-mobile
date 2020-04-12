@@ -24,7 +24,7 @@ export type Props<T extends keyof ParamList> = {
 
 const Tab = createBottomTabNavigator<ParamList>();
 
-function BottomTabs() {
+function BottomTabs(): React.ReactElement {
   return (
     <Tab.Navigator initialRouteName="DiscoverTab">
       <Tab.Screen

@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { Props } from 'routes/TvShowsStack';
 
-function TvShows({ navigation }: Props<'TvShows'>) {
+function TvShows({ navigation }: Props<'TvShows'>): React.ReactElement {
   return (
     <View style={styles.container}>
       <Text>TV Shows screen</Text>

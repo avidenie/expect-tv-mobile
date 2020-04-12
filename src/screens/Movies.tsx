@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { Props } from 'routes/MoviesStack';
 
-function Movies({ navigation }: Props<'Movies'>) {
+function Movies({ navigation }: Props<'Movies'>): React.ReactElement {
   return (
     <View style={styles.container}>
       <Text>Movies Screen</Text>

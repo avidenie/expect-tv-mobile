@@ -7,7 +7,7 @@ import { Props as MoviesProps } from 'routes/MoviesStack';
 
 type Props = DiscoverProps<'MovieDetails'> | MoviesProps<'MovieDetails'>;
 
-function MovieDetails({ navigation, route }: Props) {
+function MovieDetails({ navigation, route }: Props): React.ReactElement {
   const movieId = route.params.id;
   return (
     <View style={styles.container}>
