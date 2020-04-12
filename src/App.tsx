@@ -1,11 +1,12 @@
+import * as React from 'react';
+
+import BottomTabs from 'routes/BottomTabs';
 import { NavigationContainer } from '@react-navigation/native';
-import React from 'react';
-import RootNavigation from 'routes/RootNavigation';
 
 const App = () => {
   return (
     <NavigationContainer>
-      <RootNavigation />
+      <BottomTabs />
     </NavigationContainer>
   );
 };
