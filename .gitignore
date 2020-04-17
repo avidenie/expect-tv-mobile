@@ -64,3 +64,6 @@ buck-out/
 
 # Tests
 coverage/
+
+# react-native-config
+.env
