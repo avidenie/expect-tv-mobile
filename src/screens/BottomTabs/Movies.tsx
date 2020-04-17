@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { Props } from 'routes/MoviesStack';
+import { Props } from 'routes/BottomTabs';
 
 function Movies({ navigation }: Props<'Movies'>): React.ReactElement {
   return (

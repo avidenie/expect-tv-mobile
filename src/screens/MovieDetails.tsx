@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { Props as DiscoverProps } from 'routes/DiscoverStack';
-import { Props as MoviesProps } from 'routes/MoviesStack';
+import { Props } from 'routes/DefaultStack';
 
-type Props = DiscoverProps<'MovieDetails'> | MoviesProps<'MovieDetails'>;
-
-function MovieDetails({ navigation, route }: Props): React.ReactElement {
+function MovieDetails({
+  navigation,
+  route,
+}: Props<'MovieDetails'>): React.ReactElement {
   const movieId = route.params.id;
   return (
     <View style={styles.container}>
@@ -18,7 +18,11 @@ function MovieDetails({ navigation, route }: Props): React.ReactElement {
       />
       <Button
         title="Jump to TV Shows tab"
-        onPress={() => navigation.jumpTo('TvShowsTab')}
+        onPress={() => navigation.navigate('TvShows')}
+      />
+      <Button
+        title="Go to Settings"
+        onPress={() => navigation.navigate('Settings')}
       />
     </View>
   );

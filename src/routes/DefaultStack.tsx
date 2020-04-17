@@ -1,45 +1,42 @@
 import * as React from 'react';
 
-import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 import {
   StackNavigationProp,
   createStackNavigator,
 } from '@react-navigation/stack';
 
-import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
-import { ParamList as BottomTabsParamList } from 'routes/BottomTabs';
-import Discover from 'screens/Discover';
+import BottomTabs from 'routes/BottomTabs';
 import MovieDetails from 'screens/MovieDetails';
+import { RouteProp } from '@react-navigation/native';
+import Settings from 'screens/Settings';
 import TvShowDetails from 'screens/TvShowDetails';
 
-type ParamList = {
-  Discover: undefined;
+export type ParamList = {
+  BottomTabs: undefined;
   MovieDetails: {
     id: string;
   };
   TvShowDetails: {
     id: string;
   };
+  Settings: undefined;
 };
 
 export type Props<T extends keyof ParamList> = {
-  navigation: CompositeNavigationProp<
-    StackNavigationProp<ParamList, T>,
-    BottomTabNavigationProp<BottomTabsParamList>
-  >;
+  navigation: StackNavigationProp<ParamList, T>;
   route: RouteProp<ParamList, T>;
 };
 
 const Stack = createStackNavigator<ParamList>();
 
-function DiscoverStack(): React.ReactElement {
+function RootStack(): React.ReactElement {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Discover"
-        component={Discover}
+        name="BottomTabs"
+        component={BottomTabs}
         options={{
-          headerTitle: 'Discover',
+          headerTitle: 'Expect TV',
         }}
       />
       <Stack.Screen
@@ -56,8 +53,15 @@ function DiscoverStack(): React.ReactElement {
           headerTitle: 'TV Show Details',
         }}
       />
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerTitle: 'Settings',
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
-export default DiscoverStack;
+export default RootStack;

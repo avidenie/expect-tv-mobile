@@ -4,21 +4,26 @@ import {
   BottomTabNavigationProp,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
+import { CompositeNavigationProp, RouteProp } from '@react-navigation/native';
 
-import DiscoverStack from 'routes/DiscoverStack';
+import { ParamList as DefaultStackParamList } from 'routes/DefaultStack';
+import Discover from 'screens/BottomTabs/Discover';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MoviesStack from 'routes/MoviesStack';
-import { RouteProp } from '@react-navigation/native';
-import TvShowsStack from 'routes/TvShowsStack';
+import Movies from 'screens/BottomTabs/Movies';
+import { StackNavigationProp } from '@react-navigation/stack';
+import TvShows from 'screens/BottomTabs/TvShows';
 
 export type ParamList = {
-  DiscoverTab: undefined;
-  MoviesTab: undefined;
-  TvShowsTab: undefined;
+  Discover: undefined;
+  Movies: undefined;
+  TvShows: undefined;
 };
 
 export type Props<T extends keyof ParamList> = {
-  navigation: BottomTabNavigationProp<ParamList, T>;
+  navigation: CompositeNavigationProp<
+    BottomTabNavigationProp<ParamList, T>,
+    StackNavigationProp<DefaultStackParamList>
+  >;
   route: RouteProp<ParamList, T>;
 };
 
@@ -26,10 +31,10 @@ const Tab = createBottomTabNavigator<ParamList>();
 
 function BottomTabs(): React.ReactElement {
   return (
-    <Tab.Navigator initialRouteName="DiscoverTab">
+    <Tab.Navigator initialRouteName="Discover">
       <Tab.Screen
-        name="DiscoverTab"
-        component={DiscoverStack}
+        name="Discover"
+        component={Discover}
         options={{
           tabBarLabel: 'Discover',
           tabBarIcon: ({ color }) => (
@@ -42,8 +47,8 @@ function BottomTabs(): React.ReactElement {
         }}
       />
       <Tab.Screen
-        name="MoviesTab"
-        component={MoviesStack}
+        name="Movies"
+        component={Movies}
         options={{
           tabBarLabel: 'Movies',
           tabBarIcon: ({ color }) => (
@@ -56,8 +61,8 @@ function BottomTabs(): React.ReactElement {
         }}
       />
       <Tab.Screen
-        name="TvShowsTab"
-        component={TvShowsStack}
+        name="TvShows"
+        component={TvShows}
         options={{
           tabBarLabel: 'TV Shows',
           tabBarIcon: ({ color }) => (

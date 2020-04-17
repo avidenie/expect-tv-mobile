@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-import { Props } from 'routes/DiscoverStack';
+import { Props } from 'routes/BottomTabs';
 
 function Discover({ navigation }: Props<'Discover'>): React.ReactElement {
   return (
@@ -10,7 +10,7 @@ function Discover({ navigation }: Props<'Discover'>): React.ReactElement {
       <Text>Discover Screen</Text>
       <View style={styles.buttons}>
         <Button
-          title="Movie"
+          title="A Movie"
           onPress={() =>
             navigation.navigate('MovieDetails', {
               id: 'someMovieId',
@@ -18,17 +18,14 @@ function Discover({ navigation }: Props<'Discover'>): React.ReactElement {
           }
         />
         <Button
-          title="TV Show"
+          title="A TV Show"
           onPress={() =>
             navigation.navigate('TvShowDetails', {
               id: 'someTvShowId',
             })
           }
         />
-        <Button
-          title="TV Shows"
-          onPress={() => navigation.jumpTo('TvShowsTab')}
-        />
+        <Button title="Settings" onPress={() => navigation.push('Settings')} />
       </View>
     </View>
   );
