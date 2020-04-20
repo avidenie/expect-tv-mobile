@@ -1,30 +1,24 @@
 import * as React from 'react';
 
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
+import PopularMovies from 'components/PopularMovies';
 import { Props } from 'routes/BottomTabs';
 
 function Movies({ navigation }: Props<'Movies'>): React.ReactElement {
   return (
-    <View style={styles.container}>
-      <Text>Movies Screen</Text>
-      <Button
-        title="Go to movie details"
-        onPress={() =>
-          navigation.navigate('MovieDetails', {
-            id: 'movieId',
-          })
-        }
+    <ScrollView style={styles.container}>
+      <PopularMovies
+        onPress={(tmdbId) => () =>
+          navigation.navigate('MovieDetails', { tmdbId })}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

@@ -1,30 +1,24 @@
 import * as React from 'react';
 
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
+import PopularTvShows from 'components/PopularTvShows';
 import { Props } from 'routes/BottomTabs';
 
 function TvShows({ navigation }: Props<'TvShows'>): React.ReactElement {
   return (
-    <View style={styles.container}>
-      <Text>TV Shows screen</Text>
-      <Button
-        title="Go to TV Show details"
-        onPress={() =>
-          navigation.navigate('TvShowDetails', {
-            id: 'tvShowId',
-          })
-        }
+    <ScrollView style={styles.container}>
+      <PopularTvShows
+        onPress={(tmdbId) => () =>
+          navigation.navigate('TvShowDetails', { tmdbId })}
       />
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
 

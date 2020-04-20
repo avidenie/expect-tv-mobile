@@ -14,16 +14,21 @@ import TvShowDetails from 'screens/TvShowDetails';
 export type ParamList = {
   BottomTabs: undefined;
   MovieDetails: {
-    id: string;
+    tmdbId: number;
   };
   TvShowDetails: {
-    id: string;
+    tmdbId: number;
   };
   Settings: undefined;
 };
 
+export type NavigationProp<T extends keyof ParamList> = StackNavigationProp<
+  ParamList,
+  T
+>;
+
 export type Props<T extends keyof ParamList> = {
-  navigation: StackNavigationProp<ParamList, T>;
+  navigation: NavigationProp<T>;
   route: RouteProp<ParamList, T>;
 };
 

@@ -1,47 +1,33 @@
 import * as React from 'react';
 
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
+import PopularMovies from 'components/PopularMovies';
+import PopularTvShows from 'components/PopularTvShows';
 import { Props } from 'routes/BottomTabs';
 
 function Discover({ navigation }: Props<'Discover'>): React.ReactElement {
   return (
-    <View style={styles.container}>
-      <Text>Discover Screen</Text>
-      <View style={styles.buttons}>
-        <Button
-          title="A Movie"
-          onPress={() =>
-            navigation.navigate('MovieDetails', {
-              id: 'someMovieId',
-            })
-          }
+    <ScrollView style={styles.container}>
+      <View>
+        <PopularMovies
+          onPress={(tmdbId) => () =>
+            navigation.navigate('MovieDetails', { tmdbId })}
         />
-        <Button
-          title="A TV Show"
-          onPress={() =>
-            navigation.navigate('TvShowDetails', {
-              id: 'someTvShowId',
-            })
-          }
-        />
-        <Button title="Settings" onPress={() => navigation.push('Settings')} />
       </View>
-    </View>
+      <View>
+        <PopularTvShows
+          onPress={(tmdbId) => () =>
+            navigation.navigate('TvShowDetails', { tmdbId })}
+        />
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttons: {
-    width: '100%',
-    padding: 20,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
   },
 });
 
