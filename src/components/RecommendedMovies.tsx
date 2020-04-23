@@ -1,29 +1,32 @@
 import * as React from 'react';
 
-import { PAGE_INFO_FIELDS, TV_SHOW_OVERVIEW_FIELDS } from 'graphql/fragments';
-import { SimilarTvShowsData, SimilarTvShowsVariables } from 'types/tvShows';
+import { MOVIE_OVERVIEW_FIELDS, PAGE_INFO_FIELDS } from 'graphql/fragments';
+import {
+  RecommendedMoviesData,
+  RecommendedMoviesVariables,
+} from 'types/movies';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 
 import { NavigationProp } from 'routes/DefaultStack';
 import { useNavigation } from '@react-navigation/native';
 
-const GET_SIMILAR_TV_SHOWS = gql`
-  query getSimilarTvShows(
+const GET_RECOMMENDED_MOVIES = gql`
+  query getRecommendedMovies(
     $tmdbId: Int!
     $language: String = "en"
     $page: Int = 1
   ) {
-    similarTvShows(tmdbId: $tmdbId, language: $language, page: $page) {
+    recommendedMovies(tmdbId: $tmdbId, language: $language, page: $page) {
       results {
-        ...tvShowOverviewFields
+        ...movieOverviewFields
       }
       pageInfo {
         ...pageInfoFields
       }
     }
   }
-  ${TV_SHOW_OVERVIEW_FIELDS}
+  ${MOVIE_OVERVIEW_FIELDS}
   ${PAGE_INFO_FIELDS}
 `;
 
@@ -31,16 +34,12 @@ type Props = {
   tmdbId: number;
 };
 
-function getReleaseYear(firstAirDate: string): string {
-  return firstAirDate.split('-')[0];
-}
-
-function SimilarTvShows({ tmdbId }: Props): React.ReactElement {
-  const navigation = useNavigation<NavigationProp<'TvShowDetails'>>();
+function RecommendedMovies({ tmdbId }: Props): React.ReactElement {
+  const navigation = useNavigation<NavigationProp<'MovieDetails'>>();
   const { loading, error, data } = useQuery<
-    SimilarTvShowsData,
-    SimilarTvShowsVariables
-  >(GET_SIMILAR_TV_SHOWS, { variables: { tmdbId } });
+    RecommendedMoviesData,
+    RecommendedMoviesVariables
+  >(GET_RECOMMENDED_MOVIES, { variables: { tmdbId } });
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -52,19 +51,18 @@ function SimilarTvShows({ tmdbId }: Props): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Similar TV Shows</Text>
+      <Text style={styles.title}>Recommended Movies</Text>
       <View>
         {data &&
-          data.similarTvShows.results.map((tvShow) => (
+          data.recommendedMovies.results.map((movie) => (
             <TouchableOpacity
-              key={tvShow.tmdbId}
+              key={movie.tmdbId}
               style={styles.item}
               onPress={() =>
-                navigation.push('TvShowDetails', { tmdbId: tvShow.tmdbId })
+                navigation.push('MovieDetails', { tmdbId: movie.tmdbId })
               }>
               <Text>
-                {tvShow.tmdbId}. {tvShow.name} (
-                {getReleaseYear(tvShow.firstAirDate)})
+                {movie.tmdbId}. {movie.title}
               </Text>
             </TouchableOpacity>
           ))}
@@ -87,4 +85,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SimilarTvShows;
+export default RecommendedMovies;

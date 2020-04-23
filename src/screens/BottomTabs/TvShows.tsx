@@ -2,13 +2,14 @@ import * as React from 'react';
 
 import { ScrollView, StyleSheet } from 'react-native';
 
-import PopularTvShows from 'components/PopularTvShows';
+import DiscoverTvShows from 'components/DiscoverTvShows';
 import { Props } from 'routes/BottomTabs';
 
 function TvShows({ navigation }: Props<'TvShows'>): React.ReactElement {
   return (
     <ScrollView style={styles.container}>
-      <PopularTvShows
+      <DiscoverTvShows
+        title="What's Popular"
         onPress={(tmdbId) => () =>
           navigation.navigate('TvShowDetails', { tmdbId })}
       />

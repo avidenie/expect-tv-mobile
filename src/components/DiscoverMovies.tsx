@@ -1,48 +1,48 @@
 import * as React from 'react';
 
-import { PopularMoviesData, PopularMoviesVars } from 'types/movies';
+import {
+  DiscoverMoviesData,
+  DiscoverMoviesParams,
+  DiscoverMoviesVariables,
+} from 'types/movies';
+import { MOVIE_OVERVIEW_FIELDS, PAGE_INFO_FIELDS } from 'graphql/fragments';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 
 type Props = {
+  title: string;
+  params?: DiscoverMoviesParams;
   onPress: (tmdbId: number) => () => void;
 };
 
-const GET_POPULAR_MOVIES = gql`
-  query getPopularMovies(
-    $region: String = "US"
-    $language: String = "en"
-    $page: Int = 1
-  ) {
-    popularMovies(region: $region, language: $language, page: $page) {
+const DISCOVER_MOVIES_QUERY = gql`
+  query discoverMovies($params: DiscoverMoviesInput!) {
+    discoverMovies(params: $params) {
       results {
-        tmdbId
-        title
-        releaseDate
-        images {
-          poster
-          thumbnail
-          logo
-        }
+        ...movieOverviewFields
       }
       pageInfo {
-        page
-        totalPages
-        totalResults
+        ...pageInfoFields
       }
     }
   }
+  ${MOVIE_OVERVIEW_FIELDS}
+  ${PAGE_INFO_FIELDS}
 `;
 
-function getReleaseYear(releaseDate: string): string {
+function getReleaseYear(releaseDate: String): String {
   return releaseDate.split('-')[0];
 }
 
-function PopularMovies({ onPress }: Props): React.ReactElement {
+function DiscoverMovies({ title, params, onPress }: Props): React.ReactElement {
   const { loading, error, data } = useQuery<
-    PopularMoviesData,
-    PopularMoviesVars
-  >(GET_POPULAR_MOVIES);
+    DiscoverMoviesData,
+    DiscoverMoviesVariables
+  >(DISCOVER_MOVIES_QUERY, {
+    variables: {
+      params: params || {},
+    },
+  });
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -54,10 +54,10 @@ function PopularMovies({ onPress }: Props): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Popular Movies</Text>
+      <Text style={styles.title}>{title}</Text>
       <View>
         {data &&
-          data.popularMovies.results.map((movie) => (
+          data.discoverMovies.results.map((movie) => (
             <TouchableOpacity
               key={movie.tmdbId}
               style={styles.item}
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PopularMovies;
+export default DiscoverMovies;

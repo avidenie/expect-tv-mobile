@@ -1,20 +1,23 @@
 import * as React from 'react';
 
+import {
+  DiscoverTvShowsData,
+  DiscoverTvShowsParams,
+  DiscoverTvShowsVariables,
+} from 'types/tvShows';
 import { PAGE_INFO_FIELDS, TV_SHOW_OVERVIEW_FIELDS } from 'graphql/fragments';
-import { SimilarTvShowsData, SimilarTvShowsVariables } from 'types/tvShows';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 
-import { NavigationProp } from 'routes/DefaultStack';
-import { useNavigation } from '@react-navigation/native';
+type Props = {
+  title: string;
+  params?: DiscoverTvShowsParams;
+  onPress: (tmdbId: number) => () => void;
+};
 
-const GET_SIMILAR_TV_SHOWS = gql`
-  query getSimilarTvShows(
-    $tmdbId: Int!
-    $language: String = "en"
-    $page: Int = 1
-  ) {
-    similarTvShows(tmdbId: $tmdbId, language: $language, page: $page) {
+const DISCOVER_TV_SHOWS_QUERIES = gql`
+  query discoverTvShows($params: DiscoverTvShowsInput!) {
+    discoverTvShows(params: $params) {
       results {
         ...tvShowOverviewFields
       }
@@ -27,20 +30,23 @@ const GET_SIMILAR_TV_SHOWS = gql`
   ${PAGE_INFO_FIELDS}
 `;
 
-type Props = {
-  tmdbId: number;
-};
-
-function getReleaseYear(firstAirDate: string): string {
+function getFirstAirYear(firstAirDate: String): String {
   return firstAirDate.split('-')[0];
 }
 
-function SimilarTvShows({ tmdbId }: Props): React.ReactElement {
-  const navigation = useNavigation<NavigationProp<'TvShowDetails'>>();
+function DiscoverTvShows({
+  title,
+  params,
+  onPress,
+}: Props): React.ReactElement {
   const { loading, error, data } = useQuery<
-    SimilarTvShowsData,
-    SimilarTvShowsVariables
-  >(GET_SIMILAR_TV_SHOWS, { variables: { tmdbId } });
+    DiscoverTvShowsData,
+    DiscoverTvShowsVariables
+  >(DISCOVER_TV_SHOWS_QUERIES, {
+    variables: {
+      params: params || {},
+    },
+  });
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -52,19 +58,17 @@ function SimilarTvShows({ tmdbId }: Props): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Similar TV Shows</Text>
+      <Text style={styles.title}>{title}</Text>
       <View>
         {data &&
-          data.similarTvShows.results.map((tvShow) => (
+          data.discoverTvShows.results.map((tvShow) => (
             <TouchableOpacity
               key={tvShow.tmdbId}
               style={styles.item}
-              onPress={() =>
-                navigation.push('TvShowDetails', { tmdbId: tvShow.tmdbId })
-              }>
+              onPress={onPress(tvShow.tmdbId)}>
               <Text>
                 {tvShow.tmdbId}. {tvShow.name} (
-                {getReleaseYear(tvShow.firstAirDate)})
+                {getFirstAirYear(tvShow.firstAirDate)})
               </Text>
             </TouchableOpacity>
           ))}
@@ -75,6 +79,7 @@ function SimilarTvShows({ tmdbId }: Props): React.ReactElement {
 
 const styles = StyleSheet.create({
   container: {
+    paddingHorizontal: 16,
     paddingVertical: 8,
   },
   title: {
@@ -87,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SimilarTvShows;
+export default DiscoverTvShows;

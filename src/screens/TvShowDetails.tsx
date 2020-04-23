@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { TvShowDetailsData, TvShowDetailsVars } from 'types/tvShows';
+import { TvShowDetailsData, TvShowDetailsVariables } from 'types/tvShows';
 import { gql, useQuery } from '@apollo/client';
 
 import { Props } from 'routes/DefaultStack';
+import RecommendedTvShows from 'components/RecommendedTvShows';
 import SimilarTvShows from 'components/SimilarTvShows';
 
 const GET_TV_SHOW_DETAILS = gql`
@@ -40,7 +41,7 @@ const GET_TV_SHOW_DETAILS = gql`
   }
 `;
 
-function getReleaseYear(firstAirDate: string): string {
+function getFirstAirYear(firstAirDate: string): string {
   return firstAirDate.split('-')[0];
 }
 
@@ -64,7 +65,7 @@ function TvShowDetails({ route }: Props<'TvShowDetails'>): React.ReactElement {
 
   const { loading, error, data } = useQuery<
     TvShowDetailsData,
-    TvShowDetailsVars
+    TvShowDetailsVariables
   >(GET_TV_SHOW_DETAILS, {
     variables: {
       tmdbId,
@@ -85,8 +86,8 @@ function TvShowDetails({ route }: Props<'TvShowDetails'>): React.ReactElement {
     <ScrollView style={styles.container}>
       <Text style={styles.row}>ID: #{tmdbId}</Text>
       <Text style={styles.row}>
-        Name: {tvShowDetails.name} ({getReleaseYear(tvShowDetails.firstAirDate)}
-        )
+        Name: {tvShowDetails.name} (
+        {getFirstAirYear(tvShowDetails.firstAirDate)})
       </Text>
       {tvShowDetails.originalName && (
         <Text style={styles.row}>
@@ -121,6 +122,7 @@ function TvShowDetails({ route }: Props<'TvShowDetails'>): React.ReactElement {
       </Text>
       <Text style={styles.row}>Type: {tvShowDetails.type}</Text>
       <Text style={styles.row}>Status: {tvShowDetails.status}</Text>
+      <RecommendedTvShows tmdbId={tmdbId} />
       <SimilarTvShows tmdbId={tmdbId} />
     </ScrollView>
   );

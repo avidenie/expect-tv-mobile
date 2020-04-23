@@ -2,13 +2,14 @@ import * as React from 'react';
 
 import { ScrollView, StyleSheet } from 'react-native';
 
-import PopularMovies from 'components/PopularMovies';
+import DiscoverMovies from 'components/DiscoverMovies';
 import { Props } from 'routes/BottomTabs';
 
 function Movies({ navigation }: Props<'Movies'>): React.ReactElement {
   return (
     <ScrollView style={styles.container}>
-      <PopularMovies
+      <DiscoverMovies
+        title="What's Popular"
         onPress={(tmdbId) => () =>
           navigation.navigate('MovieDetails', { tmdbId })}
       />

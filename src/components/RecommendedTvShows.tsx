@@ -1,48 +1,49 @@
 import * as React from 'react';
 
-import { PopularTvShowsData, PopularTvShowsVars } from 'types/tvShows';
+import { PAGE_INFO_FIELDS, TV_SHOW_OVERVIEW_FIELDS } from 'graphql/fragments';
+import {
+  RecommendedTvShowsData,
+  RecommendedTvShowsVariables,
+} from 'types/tvShows';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 
-const GET_POPULAR_TV_SHOWS = gql`
-  query getPopularTvShows(
-    $region: String = "US"
+import { NavigationProp } from 'routes/DefaultStack';
+import { useNavigation } from '@react-navigation/native';
+
+const GET_RECOMMENDED_TV_SHOWS = gql`
+  query getRecommendedTvShows(
+    $tmdbId: Int!
     $language: String = "en"
     $page: Int = 1
   ) {
-    popularTvShows(region: $region, language: $language, page: $page) {
+    recommendedTvShows(tmdbId: $tmdbId, language: $language, page: $page) {
       results {
-        tmdbId
-        name
-        firstAirDate
-        images {
-          poster
-          thumbnail
-          logo
-        }
+        ...tvShowOverviewFields
       }
       pageInfo {
-        page
-        totalPages
-        totalResults
+        ...pageInfoFields
       }
     }
   }
+  ${TV_SHOW_OVERVIEW_FIELDS}
+  ${PAGE_INFO_FIELDS}
 `;
 
 type Props = {
-  onPress: (tmdbId: number) => () => void;
+  tmdbId: number;
 };
 
 function getReleaseYear(firstAirDate: string): string {
   return firstAirDate.split('-')[0];
 }
 
-function PopularTvShows({ onPress }: Props): React.ReactElement {
+function RecommendedTvShows({ tmdbId }: Props): React.ReactElement {
+  const navigation = useNavigation<NavigationProp<'TvShowDetails'>>();
   const { loading, error, data } = useQuery<
-    PopularTvShowsData,
-    PopularTvShowsVars
-  >(GET_POPULAR_TV_SHOWS);
+    RecommendedTvShowsData,
+    RecommendedTvShowsVariables
+  >(GET_RECOMMENDED_TV_SHOWS, { variables: { tmdbId } });
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -54,14 +55,16 @@ function PopularTvShows({ onPress }: Props): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Popular TV Shows</Text>
+      <Text style={styles.title}>Recommended TV Shows</Text>
       <View>
         {data &&
-          data.popularTvShows.results.map((tvShow) => (
+          data.recommendedTvShows.results.map((tvShow) => (
             <TouchableOpacity
               key={tvShow.tmdbId}
               style={styles.item}
-              onPress={onPress(tvShow.tmdbId)}>
+              onPress={() =>
+                navigation.push('TvShowDetails', { tmdbId: tvShow.tmdbId })
+              }>
               <Text>
                 {tvShow.tmdbId}. {tvShow.name} (
                 {getReleaseYear(tvShow.firstAirDate)})
@@ -75,7 +78,6 @@ function PopularTvShows({ onPress }: Props): React.ReactElement {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
     paddingVertical: 8,
   },
   title: {
@@ -84,8 +86,8 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   item: {
-    paddingVertical: 2,
+    paddingVertical: 4,
   },
 });
 
-export default PopularTvShows;
+export default RecommendedTvShows;

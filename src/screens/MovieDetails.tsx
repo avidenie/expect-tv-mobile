@@ -2,13 +2,14 @@ import * as React from 'react';
 
 import {
   MovieDetailsData,
-  MovieDetailsVars,
+  MovieDetailsVariables,
   RegionReleaseDate,
 } from 'types/movies';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 
 import { Props } from 'routes/DefaultStack';
+import RecommendedMovies from 'components/RecommendedMovies';
 import SimilarMovies from 'components/SimilarMovies';
 
 const GET_MOVIE_DETAILS = gql`
@@ -68,8 +69,7 @@ const GET_MOVIE_DETAILS = gql`
 `;
 
 function getCertification(releaseDates: RegionReleaseDate[]): string {
-  console.log(releaseDates);
-  for (let i = 0, n = releaseDates.length; i <= n; i++) {
+  for (let i = 0, n = releaseDates.length; i < n; i++) {
     const releaseDate = releaseDates[i].results.find(
       (date) => date.certification !== '',
     );
@@ -102,14 +102,14 @@ function formatRuntime(runtime: number): string {
 function MovieDetails({ route }: Props<'MovieDetails'>): React.ReactElement {
   const { tmdbId } = route.params;
 
-  const { loading, error, data } = useQuery<MovieDetailsData, MovieDetailsVars>(
-    GET_MOVIE_DETAILS,
-    {
-      variables: {
-        tmdbId,
-      },
+  const { loading, error, data } = useQuery<
+    MovieDetailsData,
+    MovieDetailsVariables
+  >(GET_MOVIE_DETAILS, {
+    variables: {
+      tmdbId,
     },
-  );
+  });
 
   if (loading) {
     return <Text>Loading...</Text>;
@@ -165,6 +165,7 @@ function MovieDetails({ route }: Props<'MovieDetails'>): React.ReactElement {
         Starring:{' '}
         {movieDetails.credits.cast.map((cast) => cast.name).join(', ')}
       </Text>
+      <RecommendedMovies tmdbId={tmdbId} />
       <SimilarMovies tmdbId={tmdbId} />
     </ScrollView>
   );
