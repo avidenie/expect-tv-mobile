@@ -25,10 +25,15 @@ const GET_MOVIE_DETAILS = gql`
       originalLanguage
       releaseDate
       images {
-        poster
-        thumbnail
-        logo
-        backgrounds(limit: 1)
+        logo {
+          url
+        }
+        poster(orientation: PORTRAIT) {
+          url
+        }
+        background(orientation: LANDSCAPE) {
+          url
+        }
       }
       tagline
       overview

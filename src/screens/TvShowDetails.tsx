@@ -17,10 +17,15 @@ const GET_TV_SHOW_DETAILS = gql`
       originalLanguage
       firstAirDate
       images {
-        poster
-        thumbnail
-        logo
-        backgrounds(limit: 1)
+        logo {
+          url
+        }
+        poster(orientation: PORTRAIT) {
+          url
+        }
+        background(orientation: LANDSCAPE) {
+          url
+        }
       }
       overview
       genres {

@@ -6,9 +6,12 @@ export const MOVIE_OVERVIEW_FIELDS = gql`
     title
     releaseDate
     images {
-      poster
-      thumbnail
-      logo
+      logo {
+        url
+      }
+      poster(orientation: PORTRAIT) {
+        url
+      }
     }
   }
 `;
@@ -19,9 +22,12 @@ export const TV_SHOW_OVERVIEW_FIELDS = gql`
     name
     firstAirDate
     images {
-      poster
-      thumbnail
-      logo
+      logo {
+        url
+      }
+      poster(orientation: PORTRAIT) {
+        url
+      }
     }
   }
 `;
