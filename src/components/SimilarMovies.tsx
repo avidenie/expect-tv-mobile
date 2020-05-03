@@ -1,31 +1,15 @@
 import * as React from 'react';
 
-import { MOVIE_OVERVIEW_FIELDS, PAGE_INFO_FIELDS } from 'graphql/fragments';
-import { SimilarMoviesData, SimilarMoviesVariables } from 'types/movies';
+import {
+  SimilarMoviesQuery,
+  SimilarMoviesQueryVariables,
+} from 'types/generated';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
 
 import { NavigationProp } from 'routes/DefaultStack';
+import { SimilarMoviesDocument } from 'graphql/queries';
 import { useNavigation } from '@react-navigation/native';
-
-const GET_SIMILAR_MOVIES = gql`
-  query getSimilarMovies(
-    $tmdbId: Int!
-    $language: String = "en"
-    $page: Int = 1
-  ) {
-    similarMovies(tmdbId: $tmdbId, language: $language, page: $page) {
-      results {
-        ...movieOverviewFields
-      }
-      pageInfo {
-        ...pageInfoFields
-      }
-    }
-  }
-  ${MOVIE_OVERVIEW_FIELDS}
-  ${PAGE_INFO_FIELDS}
-`;
+import { useQuery } from '@apollo/client';
 
 type Props = {
   tmdbId: number;
@@ -34,9 +18,9 @@ type Props = {
 function SimilarMovies({ tmdbId }: Props): React.ReactElement {
   const navigation = useNavigation<NavigationProp<'MovieDetails'>>();
   const { loading, error, data } = useQuery<
-    SimilarMoviesData,
-    SimilarMoviesVariables
-  >(GET_SIMILAR_MOVIES, { variables: { tmdbId } });
+    SimilarMoviesQuery,
+    SimilarMoviesQueryVariables
+  >(SimilarMoviesDocument, { variables: { tmdbId } });
 
   if (loading) {
     return <Text>Loading...</Text>;

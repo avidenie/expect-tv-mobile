@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const MOVIE_OVERVIEW_FIELDS = gql`
+export const MovieOverviewFragment = gql`
   fragment movieOverviewFields on MovieOverview {
     tmdbId
     title
@@ -16,7 +16,7 @@ export const MOVIE_OVERVIEW_FIELDS = gql`
   }
 `;
 
-export const TV_SHOW_OVERVIEW_FIELDS = gql`
+export const TvShowOverviewFragment = gql`
   fragment tvShowOverviewFields on TvShowOverview {
     tmdbId
     name
@@ -32,7 +32,7 @@ export const TV_SHOW_OVERVIEW_FIELDS = gql`
   }
 `;
 
-export const PAGE_INFO_FIELDS = gql`
+export const PageInfoFragment = gql`
   fragment pageInfoFields on PageInfo {
     page
     totalPages

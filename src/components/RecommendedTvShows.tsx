@@ -1,34 +1,15 @@
 import * as React from 'react';
 
-import { PAGE_INFO_FIELDS, TV_SHOW_OVERVIEW_FIELDS } from 'graphql/fragments';
 import {
-  RecommendedTvShowsData,
-  RecommendedTvShowsVariables,
-} from 'types/tvShows';
+  RecommendedTvShowsQuery,
+  RecommendedTvShowsQueryVariables,
+} from 'types/generated';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
 
 import { NavigationProp } from 'routes/DefaultStack';
+import { RecommendedTvShowsDocument } from 'graphql/queries';
 import { useNavigation } from '@react-navigation/native';
-
-const GET_RECOMMENDED_TV_SHOWS = gql`
-  query getRecommendedTvShows(
-    $tmdbId: Int!
-    $language: String = "en"
-    $page: Int = 1
-  ) {
-    recommendedTvShows(tmdbId: $tmdbId, language: $language, page: $page) {
-      results {
-        ...tvShowOverviewFields
-      }
-      pageInfo {
-        ...pageInfoFields
-      }
-    }
-  }
-  ${TV_SHOW_OVERVIEW_FIELDS}
-  ${PAGE_INFO_FIELDS}
-`;
+import { useQuery } from '@apollo/client';
 
 type Props = {
   tmdbId: number;
@@ -41,9 +22,9 @@ function getReleaseYear(firstAirDate: string): string {
 function RecommendedTvShows({ tmdbId }: Props): React.ReactElement {
   const navigation = useNavigation<NavigationProp<'TvShowDetails'>>();
   const { loading, error, data } = useQuery<
-    RecommendedTvShowsData,
-    RecommendedTvShowsVariables
-  >(GET_RECOMMENDED_TV_SHOWS, { variables: { tmdbId } });
+    RecommendedTvShowsQuery,
+    RecommendedTvShowsQueryVariables
+  >(RecommendedTvShowsDocument, { variables: { tmdbId } });
 
   if (loading) {
     return <Text>Loading...</Text>;

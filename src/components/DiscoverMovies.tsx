@@ -1,34 +1,20 @@
 import * as React from 'react';
 
 import {
-  DiscoverMoviesData,
-  DiscoverMoviesParams,
-  DiscoverMoviesVariables,
-} from 'types/movies';
-import { MOVIE_OVERVIEW_FIELDS, PAGE_INFO_FIELDS } from 'graphql/fragments';
+  DiscoverMoviesInput,
+  DiscoverMoviesQuery,
+  DiscoverMoviesQueryVariables,
+} from 'types/generated';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
+
+import { DiscoverMoviesDocument } from 'graphql/queries';
+import { useQuery } from '@apollo/client';
 
 type Props = {
   title: string;
-  params?: DiscoverMoviesParams;
+  params?: DiscoverMoviesInput;
   onPress: (tmdbId: number) => () => void;
 };
-
-const DISCOVER_MOVIES_QUERY = gql`
-  query discoverMovies($params: DiscoverMoviesInput!) {
-    discoverMovies(params: $params) {
-      results {
-        ...movieOverviewFields
-      }
-      pageInfo {
-        ...pageInfoFields
-      }
-    }
-  }
-  ${MOVIE_OVERVIEW_FIELDS}
-  ${PAGE_INFO_FIELDS}
-`;
 
 function getReleaseYear(releaseDate: String): String {
   return releaseDate.split('-')[0];
@@ -36,9 +22,9 @@ function getReleaseYear(releaseDate: String): String {
 
 function DiscoverMovies({ title, params, onPress }: Props): React.ReactElement {
   const { loading, error, data } = useQuery<
-    DiscoverMoviesData,
-    DiscoverMoviesVariables
-  >(DISCOVER_MOVIES_QUERY, {
+    DiscoverMoviesQuery,
+    DiscoverMoviesQueryVariables
+  >(DiscoverMoviesDocument, {
     variables: {
       params: params || {},
     },

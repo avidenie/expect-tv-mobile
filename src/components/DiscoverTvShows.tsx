@@ -1,34 +1,20 @@
 import * as React from 'react';
 
 import {
-  DiscoverTvShowsData,
-  DiscoverTvShowsParams,
-  DiscoverTvShowsVariables,
-} from 'types/tvShows';
-import { PAGE_INFO_FIELDS, TV_SHOW_OVERVIEW_FIELDS } from 'graphql/fragments';
+  DiscoverTvShowsInput,
+  DiscoverTvShowsQuery,
+  DiscoverTvShowsQueryVariables,
+} from 'types/generated';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
+
+import { DiscoverTvShowsDocument } from 'graphql/queries';
+import { useQuery } from '@apollo/client';
 
 type Props = {
   title: string;
-  params?: DiscoverTvShowsParams;
+  params?: DiscoverTvShowsInput;
   onPress: (tmdbId: number) => () => void;
 };
-
-const DISCOVER_TV_SHOWS_QUERIES = gql`
-  query discoverTvShows($params: DiscoverTvShowsInput!) {
-    discoverTvShows(params: $params) {
-      results {
-        ...tvShowOverviewFields
-      }
-      pageInfo {
-        ...pageInfoFields
-      }
-    }
-  }
-  ${TV_SHOW_OVERVIEW_FIELDS}
-  ${PAGE_INFO_FIELDS}
-`;
 
 function getFirstAirYear(firstAirDate: String): String {
   return firstAirDate.split('-')[0];
@@ -40,9 +26,9 @@ function DiscoverTvShows({
   onPress,
 }: Props): React.ReactElement {
   const { loading, error, data } = useQuery<
-    DiscoverTvShowsData,
-    DiscoverTvShowsVariables
-  >(DISCOVER_TV_SHOWS_QUERIES, {
+    DiscoverTvShowsQuery,
+    DiscoverTvShowsQueryVariables
+  >(DiscoverTvShowsDocument, {
     variables: {
       params: params || {},
     },

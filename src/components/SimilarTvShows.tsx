@@ -1,31 +1,15 @@
 import * as React from 'react';
 
-import { PAGE_INFO_FIELDS, TV_SHOW_OVERVIEW_FIELDS } from 'graphql/fragments';
-import { SimilarTvShowsData, SimilarTvShowsVariables } from 'types/tvShows';
+import {
+  SimilarTvShowsQuery,
+  SimilarTvShowsQueryVariables,
+} from 'types/generated';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
 
 import { NavigationProp } from 'routes/DefaultStack';
+import { SimilarTvShowsDocument } from 'graphql/queries';
 import { useNavigation } from '@react-navigation/native';
-
-const GET_SIMILAR_TV_SHOWS = gql`
-  query getSimilarTvShows(
-    $tmdbId: Int!
-    $language: String = "en"
-    $page: Int = 1
-  ) {
-    similarTvShows(tmdbId: $tmdbId, language: $language, page: $page) {
-      results {
-        ...tvShowOverviewFields
-      }
-      pageInfo {
-        ...pageInfoFields
-      }
-    }
-  }
-  ${TV_SHOW_OVERVIEW_FIELDS}
-  ${PAGE_INFO_FIELDS}
-`;
+import { useQuery } from '@apollo/client';
 
 type Props = {
   tmdbId: number;
@@ -38,9 +22,9 @@ function getReleaseYear(firstAirDate: string): string {
 function SimilarTvShows({ tmdbId }: Props): React.ReactElement {
   const navigation = useNavigation<NavigationProp<'TvShowDetails'>>();
   const { loading, error, data } = useQuery<
-    SimilarTvShowsData,
-    SimilarTvShowsVariables
-  >(GET_SIMILAR_TV_SHOWS, { variables: { tmdbId } });
+    SimilarTvShowsQuery,
+    SimilarTvShowsQueryVariables
+  >(SimilarTvShowsDocument, { variables: { tmdbId } });
 
   if (loading) {
     return <Text>Loading...</Text>;

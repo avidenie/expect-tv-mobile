@@ -1,79 +1,19 @@
 import * as React from 'react';
 
 import {
-  MovieDetailsData,
-  MovieDetailsVariables,
-  RegionReleaseDate,
-} from 'types/movies';
+  MovieDetailsQuery,
+  MovieDetailsQueryVariables,
+  ReleaseDates,
+} from 'types/generated';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { gql, useQuery } from '@apollo/client';
 
+import { MovieDetailsDocument } from 'graphql/queries';
 import { Props } from 'routes/DefaultStack';
 import RecommendedMovies from 'components/RecommendedMovies';
 import SimilarMovies from 'components/SimilarMovies';
+import { useQuery } from '@apollo/client';
 
-const GET_MOVIE_DETAILS = gql`
-  query getMovieDetails(
-    $tmdbId: Int!
-    $language: String = "en"
-    $region: String = "US"
-  ) {
-    movieDetails(tmdbId: $tmdbId, language: $language) {
-      tmdbId
-      title
-      originalTitle
-      originalLanguage
-      releaseDate
-      images {
-        logo {
-          url
-        }
-        poster(orientation: PORTRAIT) {
-          url
-        }
-        background(orientation: LANDSCAPE) {
-          url
-        }
-      }
-      tagline
-      overview
-      genres {
-        name
-      }
-      runtime
-      rating {
-        voteAverage
-        voteCount
-      }
-      releaseDates(region: $region) {
-        region
-        results {
-          releaseDate
-          certification
-          type
-        }
-      }
-      credits {
-        directors {
-          id
-          name
-        }
-        writers {
-          id
-          name
-          job
-        }
-        cast {
-          id
-          name
-          character
-        }
-      }
-    }
-  }
-`;
-
-function getCertification(releaseDates: RegionReleaseDate[]): string {
+function getCertification(releaseDates: ReleaseDates[]): string {
   for (let i = 0, n = releaseDates.length; i < n; i++) {
     const releaseDate = releaseDates[i].results.find(
       (date) => date.certification !== '',
@@ -108,9 +48,9 @@ function MovieDetails({ route }: Props<'MovieDetails'>): React.ReactElement {
   const { tmdbId } = route.params;
 
   const { loading, error, data } = useQuery<
-    MovieDetailsData,
-    MovieDetailsVariables
-  >(GET_MOVIE_DETAILS, {
+    MovieDetailsQuery,
+    MovieDetailsQueryVariables
+  >(MovieDetailsDocument, {
     variables: {
       tmdbId,
     },

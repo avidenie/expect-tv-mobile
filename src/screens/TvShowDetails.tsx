@@ -1,50 +1,16 @@
 import * as React from 'react';
 
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { TvShowDetailsData, TvShowDetailsVariables } from 'types/tvShows';
-import { gql, useQuery } from '@apollo/client';
+import {
+  TvShowDetailsQuery,
+  TvShowDetailsQueryVariables,
+} from 'types/generated';
 
 import { Props } from 'routes/DefaultStack';
 import RecommendedTvShows from 'components/RecommendedTvShows';
 import SimilarTvShows from 'components/SimilarTvShows';
-
-const GET_TV_SHOW_DETAILS = gql`
-  query getTvShowDetails($tmdbId: Int!, $language: String = "en") {
-    tvShowDetails(tmdbId: $tmdbId, language: $language) {
-      tmdbId
-      name
-      originalName
-      originalLanguage
-      firstAirDate
-      images {
-        logo {
-          url
-        }
-        poster(orientation: PORTRAIT) {
-          url
-        }
-        background(orientation: LANDSCAPE) {
-          url
-        }
-      }
-      overview
-      genres {
-        name
-      }
-      runtime
-      rating {
-        voteAverage
-        voteCount
-      }
-      createdBy {
-        name
-      }
-      type
-      inProduction
-      status
-    }
-  }
-`;
+import { TvShowDetailsDocument } from 'graphql/queries';
+import { useQuery } from '@apollo/client';
 
 function getFirstAirYear(firstAirDate: string): string {
   return firstAirDate.split('-')[0];
@@ -69,9 +35,9 @@ function TvShowDetails({ route }: Props<'TvShowDetails'>): React.ReactElement {
   const { tmdbId } = route.params;
 
   const { loading, error, data } = useQuery<
-    TvShowDetailsData,
-    TvShowDetailsVariables
-  >(GET_TV_SHOW_DETAILS, {
+    TvShowDetailsQuery,
+    TvShowDetailsQueryVariables
+  >(TvShowDetailsDocument, {
     variables: {
       tmdbId,
     },
