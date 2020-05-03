@@ -45,7 +45,7 @@ export type Crew = {
 export type DiscoverMoviesInput = {
   language?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
-  sortBy?: Maybe<Scalars['String']>;
+  sortBy?: Maybe<DiscoverMoviesSortByArg>;
   certificationCountry?: Maybe<Scalars['String']>;
   certification?: Maybe<Scalars['String']>;
   certificationLte?: Maybe<Scalars['String']>;
@@ -77,9 +77,26 @@ export type DiscoverMoviesInput = {
   withOriginalLanguage?: Maybe<Scalars['String']>;
 };
 
+export enum DiscoverMoviesSortByArg {
+  PopularityAsc = 'popularity.asc',
+  PopularityDesc = 'popularity.desc',
+  ReleaseDateAsc = 'release_date.asc',
+  ReleaseDateDesc = 'release_date.desc',
+  RevenueAsc = 'revenue.asc',
+  RevenueDesc = 'revenue.desc',
+  PrimaryReleaseDateAsc = 'primary_release_date.asc',
+  PrimaryReleaseDateDesc = 'primary_release_date.desc',
+  OriginalTitleAsc = 'original_title.asc',
+  OriginalTitleDesc = 'original_title.desc',
+  VoteAverageAsc = 'vote_average.asc',
+  VoteAverageDesc = 'vote_average.desc',
+  VoteCountAsc = 'vote_count.asc',
+  VoteCountDesc = 'vote_count.desc',
+}
+
 export type DiscoverTvShowsInput = {
   language?: Maybe<Scalars['String']>;
-  sortBy?: Maybe<Scalars['String']>;
+  sortBy?: Maybe<DiscoverTvShowsSortByArg>;
   airDateGte?: Maybe<Scalars['String']>;
   airDateLte?: Maybe<Scalars['String']>;
   firstAirDateGte?: Maybe<Scalars['String']>;
@@ -101,6 +118,15 @@ export type DiscoverTvShowsInput = {
   withCompanies?: Maybe<Scalars['String']>;
   withKeywords?: Maybe<Scalars['String']>;
 };
+
+export enum DiscoverTvShowsSortByArg {
+  PopularityAsc = 'popularity.asc',
+  PopularityDesc = 'popularity.desc',
+  FirstAirDateAsc = 'first_air_date.asc',
+  FirstAirDateDesc = 'first_air_date.desc',
+  VoteAverageAsc = 'vote_average.asc',
+  VoteAverageDesc = 'vote_average.desc',
+}
 
 export type Genre = {
   __typename?: 'Genre';
@@ -286,7 +312,7 @@ export type ReleaseDate = {
   __typename?: 'ReleaseDate';
   releaseDate: Scalars['String'];
   certification: Scalars['String'];
-  type: Scalars['Int'];
+  type: ReleaseType;
 };
 
 export type ReleaseDates = {
@@ -295,7 +321,7 @@ export type ReleaseDates = {
   results: Array<ReleaseDate>;
 };
 
-export enum ReleaseDateType {
+export enum ReleaseType {
   Premiere = 'PREMIERE',
   TheatricalLimited = 'THEATRICAL_LIMITED',
   Theatrical = 'THEATRICAL',
